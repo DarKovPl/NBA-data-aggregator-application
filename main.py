@@ -1,7 +1,8 @@
 from api_requests import ApiRequests
 from grouped_teams import GroupedTeams
 from argparse_commands import ArgparseCommands
-
+from folder_structure import FolderStructure
+from stats import PlayerStats
 
 def main():
     ArgparseCommands()
@@ -13,4 +14,9 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    # FolderStructure().create_folder_structure()
+    # FolderStructure().delete_existing_files()
+    # PlayerStats().save_player_stats_locally()
+
+    PlayerStats().get_player_stats_by_name('Jeff')
+    # main()
