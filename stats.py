@@ -1,7 +1,7 @@
+import json
+import sys
 import pandas as pd
 import api_requests
-import json
-
 import folder_structure
 
 
@@ -9,7 +9,7 @@ class PlayerStats(api_requests.ApiRequests, folder_structure.FolderStructure):
 
     def __init__(self):
         super(PlayerStats, self).__init__()
-        self.get_players_stats_columns = self.get_players_stats_columns()
+        self.columns = None
 
     def save_player_stats_locally(self):
         for i in self.get_player_stats():
@@ -24,15 +24,13 @@ class PlayerStats(api_requests.ApiRequests, folder_structure.FolderStructure):
     def get_players_stats_columns(self):
         df = pd.read_csv(self.player_stats_csv_file, na_values=' ')
         df.sort_index()
-        columns = df[['first_name', 'last_name', 'height_feet', 'height_inches', 'weight_pounds']]
-        return columns
+        self.columns = df[['first_name', 'last_name', 'height_feet', 'height_inches', 'weight_pounds']]
 
-    def get_player_stats_by_name(self, name):
-
-        for column in self.get_players_stats_columns:
-
+    def view_player_stats_by_name(self, name: str):
+        err = 0
+        for column in self.columns:
             try:
-                grouped = self.get_players_stats_columns.groupby(column)
+                grouped = self.columns.groupby(column)
                 players_height = grouped.get_group(name).sort_values([
                     'height_feet',
                     'height_inches'
@@ -47,11 +45,15 @@ class PlayerStats(api_requests.ApiRequests, folder_structure.FolderStructure):
                     for index, value in players_height.iterrows():
 
                         if first_row == meter_height[index]:
-                            print(
-                                f"The tallest player: {value['first_name']} {value['last_name']} {meter_height[index]} meters")
+                            sys.stdout.writelines(
+                                f"The tallest player: "
+                                f"{value['first_name']} "
+                                f"{value['last_name']} "
+                                f"{meter_height[index]} meters\n"
+                            )
                 else:
                     first_or_last = 'by first name' if column == 'first_name' else 'by last name'
-                    print(f'The tallest player: Not found {first_or_last}')
+                    sys.stdout.writelines(f'The tallest player: Not found {first_or_last}\n')
 
                 #  There is a weight
                 players_weight = grouped.get_group(name).sort_values(
@@ -65,11 +67,19 @@ class PlayerStats(api_requests.ApiRequests, folder_structure.FolderStructure):
                     for index, value in players_weight.iterrows():
 
                         if first_row == kilogram_weight[index]:
-                            print(
-                                f"The heaviest player: {value['first_name']} {value['last_name']} {int(kilogram_weight[index])} kilograms")
+                            sys.stdout.writelines(
+                                f"The heaviest player:"
+                                f" {value['first_name']}"
+                                f" {value['last_name']}"
+                                f" {int(kilogram_weight[index])} kilograms\n")
                 else:
                     first_or_last = 'by first name' if column == 'first_name' else 'by last name'
-                    print(f'The heaviest player: Not found {first_or_last}')
+                    sys.stdout.writelines(f'The heaviest player: Not found {first_or_last}\n')
 
             except KeyError:
+                err += 1
                 continue
+
+        if err == self.columns.shape[1]:
+            sys.stdout.writelines(f'There is probably a misspell in "--name" parameter: {name}\n'
+                                  f'If you need help, write main.py -h\n')

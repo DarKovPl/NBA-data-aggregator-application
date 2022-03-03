@@ -8,7 +8,6 @@ class GroupedTeams:
         self.response = response
         self.divisions = []
         self.unique_divisions = set()
-        self.stdout = sys.stdout
 
     def get_unique_divisions(self) -> set:
 
@@ -26,8 +25,9 @@ class GroupedTeams:
                     groups[k].append(f"{i['full_name']} ({i['abbreviation']})")
         return groups
 
-    def show_results(self, groups):
+    @staticmethod
+    def show_results(groups):
         new_line_tab = '\n\t'
         for k, v in groups.items():
-            self.stdout.writelines(f'{k}\n\t{new_line_tab.join(v)}\n')
+            sys.stdout.writelines(f'{k}\n\t{new_line_tab.join(v)}\n')
 

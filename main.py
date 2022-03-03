@@ -1,22 +1,41 @@
+import argparse
 from api_requests import ApiRequests
 from grouped_teams import GroupedTeams
-from argparse_commands import ArgparseCommands
 from folder_structure import FolderStructure
 from stats import PlayerStats
 
-def main():
-    ArgparseCommands()
+
+def grouped_teams():
     resp_all_teams = ApiRequests().get_all_teams()
     grouped = GroupedTeams(resp_all_teams)
     grouped.get_unique_divisions()
     grouped.show_results(grouped.create_grouped_teams())
 
 
+def players_stats(name):
+    # import wdb; wdb.set_trace()
+    player_stats = PlayerStats()
+    # player_stats.save_player_stats_locally()
+    player_stats.get_players_stats_columns()
+    player_stats.view_player_stats_by_name(name)
+
 
 if __name__ == '__main__':
     # FolderStructure().create_folder_structure()
     # FolderStructure().delete_existing_files()
-    # PlayerStats().save_player_stats_locally()
 
-    PlayerStats().get_player_stats_by_name('Jeff')
-    # main()
+    parser = argparse.ArgumentParser()
+    subparsers = parser.add_subparsers(dest='command', required=True)
+
+    grouped_teams_parser = subparsers.add_parser('grouped_teams', help='Grouped')
+
+    players_stats_parser = subparsers.add_parser('players_stats', help='Show help')
+    players_stats_parser.add_argument('--name', action='store', type=str, help='Name')
+
+    args = parser.parse_args()
+
+    if args.command == 'grouped_teams':
+        grouped_teams()
+
+    if args.command == 'players_stats' and args.name is not None:
+        players_stats(args.name)
