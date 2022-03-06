@@ -1,6 +1,6 @@
 import json
 import sys
-
+from sqlalchemy.orm import sessionmaker
 from marshmallow import Schema, fields
 import pandas as pd
 import api_requests
@@ -104,14 +104,15 @@ class TeamStats(api_requests.ApiRequests, folder_structure.FolderStructure, AllG
         obj_list = []
         for record in self.dict_list_with_no_key:
             rec_low = {(k.lower(), v) for k, v in record.items()}
-            try:
-                data_obj = folder_structure.TeamsStats(**dict(rec_low))
-                obj_list.append(data_obj)
 
-                folder_structure.session.add_all(obj_list)
-                folder_structure.session.commit()
-            except AttributeError:
-                break
+            data_obj = folder_structure.TeamsStats(**dict(rec_low))
+            obj_list.append(data_obj)
+
+            Session = sessionmaker(bind=folder_structure.engine)
+            session = Session()
+            session.add_all(obj_list)
+            session.commit()
+            session.close()
 
     def show_teams_stats_on_console(self):
         for i in self.dict_list_with_no_key:

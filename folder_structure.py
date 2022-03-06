@@ -1,7 +1,6 @@
 import os
 from sqlalchemy import Column, String, create_engine, Table
 from sqlalchemy.orm import declarative_base
-from sqlalchemy.orm import sessionmaker
 
 
 class FolderStructure:
@@ -32,12 +31,6 @@ class FolderStructure:
         else:
             return False
 
-    def check_teams_stats_sqlite_db(self):
-        if os.path.isfile(self.teams_stats_sqlite_database):
-            return True
-        else:
-            return False
-
     def delete_existing_csv_files(self):
         if os.path.isfile(self.player_stats_csv_file):
             os.remove(self.player_stats_csv_file)
@@ -50,26 +43,26 @@ class FolderStructure:
             os.remove(self.teams_stats_json_file)
 
 
-if not FolderStructure().check_teams_stats_sqlite_db():
+FolderStructure().create_folder_structure()
+base_path = FolderStructure().teams_stats_sqlite_database
 
-    engine = create_engine(f"sqlite:///{FolderStructure().teams_stats_sqlite_database}", echo=False)
-    Base = declarative_base()
+if os.path.exists(base_path):
+    os.remove(base_path)
 
-
-    class TeamsStats(Base):
-        __table__ = Table(
-            'teams_stats',
-            Base.metadata,
-            Column('team_name', String, primary_key=True),
-            Column('won_games_as_home_team', String),
-            Column('won_games_as_visitor_team', String),
-            Column('lost_games_as_home_team', String),
-            Column('lost_games_as_visitor_team', String),
-        )
+engine = create_engine(f"sqlite:///{base_path}", echo=False)
+Base = declarative_base()
 
 
-    if not os.path.exists(f"{FolderStructure().teams_stats_sqlite_database}"):
-        Base.metadata.create_all(engine)
+class TeamsStats(Base):
+    __table__ = Table(
+        'teams_stats',
+        Base.metadata,
+        Column('team_name', String, primary_key=True),
+        Column('won_games_as_home_team', String),
+        Column('won_games_as_visitor_team', String),
+        Column('lost_games_as_home_team', String),
+        Column('lost_games_as_visitor_team', String),
+    )
 
-    Session = sessionmaker(bind=engine)
-    session = Session()
+
+Base.metadata.create_all(engine)

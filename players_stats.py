@@ -81,5 +81,6 @@ class PlayerStats(api_requests.ApiRequests, folder_structure.FolderStructure):
                 continue
 
         if err == self.columns.shape[1]:
-            sys.stdout.writelines(f'There is probably a misspell in "--name" parameter: {name}\n'
-                                  f'If you need help, write main.py -h\n')
+            sys.stdout.writelines(f'There is no player with a name or surname: {name}\n'
+                                  f'Probably there is a misspell in the parameter "--name": {name}\n'
+                                  f'If you need help, write main.py players-stats -h\n')
