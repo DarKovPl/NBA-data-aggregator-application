@@ -28,9 +28,9 @@ class PlayerStats(api_requests.ApiRequests, folder_structure.FolderStructure):
 
     def view_player_stats_by_name(self, name: str):
         err = 0
-        for column in self.columns:
+        for column_name in self.columns:
             try:
-                grouped = self.columns.groupby(column)
+                grouped = self.columns.groupby(column_name)
                 players_height = grouped.get_group(name).sort_values([
                     'height_feet',
                     'height_inches'
@@ -38,8 +38,8 @@ class PlayerStats(api_requests.ApiRequests, folder_structure.FolderStructure):
 
                 if not players_height.isna().head(1)['height_feet'].bool():
                     meter_height = round(
-                        (players_height['height_feet'] + (players_height['height_inches'] * 0.083333333)) * 0.3048, 2
-                    )
+                        (players_height['height_feet']
+                         + (players_height['height_inches'] * 0.083333333)) * 0.3048, 2)
 
                     first_row = float(meter_height[:1])
                     for index, value in players_height.iterrows():
@@ -52,7 +52,7 @@ class PlayerStats(api_requests.ApiRequests, folder_structure.FolderStructure):
                                 f"{meter_height[index]} meters\n"
                             )
                 else:
-                    first_or_last = 'by first name' if column == 'first_name' else 'by last name'
+                    first_or_last = 'by first name' if column_name == 'first_name' else 'by last name'
                     sys.stdout.writelines(f'The tallest player: Not found {first_or_last}\n')
 
                 #  There is a weight
@@ -73,7 +73,7 @@ class PlayerStats(api_requests.ApiRequests, folder_structure.FolderStructure):
                                 f" {value['last_name']}"
                                 f" {int(kilogram_weight[index])} kilograms\n")
                 else:
-                    first_or_last = 'by first name' if column == 'first_name' else 'by last name'
+                    first_or_last = 'by first name' if column_name == 'first_name' else 'by last name'
                     sys.stdout.writelines(f'The heaviest player: Not found {first_or_last}\n')
 
             except KeyError:
