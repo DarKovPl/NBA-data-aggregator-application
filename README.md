@@ -29,10 +29,10 @@ This application gathers and filtering data about NBA league, and show or store 
 * Getting statistics for a given season, and they are printed on the screen by default, but optionally they can be stored.
 
 ## Setup
-####In the beginning, you have to clone the repository from GitHub to your PC.
+#### In the beginning, you have to clone the repository from GitHub to your PC.
 * Here is a [link](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository) explaining how to clone repository.
 
-####If you want to use this application, you will need to install packages from requirements.txt file to a virtual environment. 
+#### If you want to use this application, you will need to install packages from requirements.txt file to a virtual environment. 
 * Here is a [link](https://www.arubacloud.com/tutorial/how-to-create-a-python-virtual-environment-on-ubuntu.aspx) explaining how to create virtual environment on Ubuntu.
 * Here is a [link](https://stackoverflow.com/questions/7225900/how-can-i-install-packages-using-pip-according-to-the-requirements-txt-file-from) explaining how to install packages from requriments.txt.
 
@@ -55,4 +55,4 @@ This application gathers and filtering data about NBA league, and show or store 
 
 
 ## Contact
-* ####Created by Dariusz Kowalczyk - dariusz_kowalczykk@wp.pl - feel free to contact me!
+* #### Created by Dariusz Kowalczyk - dariusz_kowalczykk@wp.pl - feel free to contact me!
