@@ -53,7 +53,8 @@ class PlayerStats(api_requests.ApiRequests, folder_structure.FolderStructure):
                             )
                 else:
                     first_or_last = 'by first name' if column_name == 'first_name' else 'by last name'
-                    sys.stdout.writelines(f'The tallest player: Not found {first_or_last}\n')
+                    sys.stdout.writelines(f"I found player {first_or_last}: {name}. "
+                                          f"There is no data of player's height.\n")
 
                 #  There is a weight
                 players_weight = grouped.get_group(name).sort_values(
@@ -74,7 +75,8 @@ class PlayerStats(api_requests.ApiRequests, folder_structure.FolderStructure):
                                 f" {int(kilogram_weight[index])} kilograms\n")
                 else:
                     first_or_last = 'by first name' if column_name == 'first_name' else 'by last name'
-                    sys.stdout.writelines(f'The heaviest player: Not found {first_or_last}\n')
+                    sys.stdout.writelines(f"I found player {first_or_last}: {name}. "
+                                          f"There is no data of player's weight.\n")
 
             except KeyError:
                 err += 1

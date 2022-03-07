@@ -1,4 +1,6 @@
 import argparse
+import sys
+
 from api_requests import ApiRequests
 from grouped_teams import GroupedTeams
 from folder_structure import FolderStructure
@@ -6,6 +8,14 @@ from players_stats import PlayerStats
 from teams_stats import TeamStats
 
 
+def message_decorator(func):
+    def wrapped(*args, **kwargs):
+        sys.stdout.writelines('Wait a minute this will take a while....\n')
+        func(*args, **kwargs)
+    return wrapped
+
+
+@message_decorator
 def grouped_teams():
     resp_all_teams = ApiRequests().get_all_teams()
     grouped = GroupedTeams(resp_all_teams)
@@ -13,6 +23,7 @@ def grouped_teams():
     grouped.show_results(grouped.create_grouped_teams())
 
 
+@message_decorator
 def players_stats(name):
     player_stats = PlayerStats()
     player_stats.save_player_stats_locally()
@@ -20,6 +31,7 @@ def players_stats(name):
     player_stats.view_player_stats_by_name(name)
 
 
+@message_decorator
 def teams_stats(year_season, condition):
     season_teams_stats = TeamStats()
     total_pages = season_teams_stats.get_meta_teams_stats_total_pages(year_season)
