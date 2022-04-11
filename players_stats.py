@@ -12,14 +12,15 @@ class PlayerStats(api_requests.ApiRequests, folder_structure.FolderStructure):
         self.columns = None
 
     def save_player_stats_locally(self):
-        for i in self.get_player_stats():
-            json_resp = json.loads(i)
-            df = pd.json_normalize(json_resp, 'data')
+        if not self.check_player_stats_csv_file():
+            for i in self.get_player_stats():
+                json_resp = json.loads(i)
+                df = pd.json_normalize(json_resp, 'data')
 
-            if self.check_player_stats_csv_file():
-                df.to_csv(self.player_stats_csv_file, header=False, mode='a', index=False)
-            else:
-                df.to_csv(self.player_stats_csv_file, header=True, index=False)
+                if self.check_player_stats_csv_file():
+                    df.to_csv(self.player_stats_csv_file, header=False, mode='a', index=False)
+                else:
+                    df.to_csv(self.player_stats_csv_file, header=True, index=False)
 
     def get_players_stats_columns(self):
         df = pd.read_csv(self.player_stats_csv_file, na_values=' ')

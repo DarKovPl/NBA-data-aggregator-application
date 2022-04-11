@@ -1,5 +1,5 @@
 # Project Name
-> Recruitment task - backend intership 2022 - Profil Software
+> Recruitment task - backend internship 2022
 
 ## Table of Contents
 * [General Info](#general-information)

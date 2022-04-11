@@ -12,6 +12,7 @@ def message_decorator(func):
     def wrapped(*args, **kwargs):
         sys.stdout.writelines('Wait a minute this will take a while....\n')
         func(*args, **kwargs)
+
     return wrapped
 
 
@@ -36,7 +37,6 @@ def teams_stats(year_season, condition):
     season_teams_stats = TeamStats()
     total_pages = season_teams_stats.get_meta_teams_stats_total_pages(year_season)
 
-    season_teams_stats.delete_existing_csv_files()
     season_teams_stats.delete_teams_stats_json_file()
 
     season_teams_stats.get_all_season_teams_stats(total_pages, year_season)
@@ -46,11 +46,11 @@ def teams_stats(year_season, condition):
 
     if condition == 'csv':
         season_teams_stats.write_teams_stats_to_csv()
-    if condition == 'json':
+    elif condition == 'json':
         season_teams_stats.write_teams_stats_to_json()
-    if condition == 'database':
+    elif condition == 'database':
         season_teams_stats.write_teams_stats_to_sqlite_db()
-    if condition == 'console':
+    elif condition == 'console':
         season_teams_stats.show_teams_stats_on_console()
 
 
@@ -105,17 +105,17 @@ if __name__ == '__main__':
     if args.command == 'grouped-teams':
         grouped_teams()
 
-    if args.command == 'players-stats':
+    elif args.command == 'players-stats':
         players_stats(args.name)
 
-    if args.command == 'teams-stats' and args.output == 'stdout':
+    elif args.command == 'teams-stats' and args.output == 'stdout':
         teams_stats(args.season, condition='console')
 
-    if args.command == 'teams-stats' and args.output == 'csv':
+    elif args.command == 'teams-stats' and args.output == 'csv':
         teams_stats(args.season, condition='csv')
 
-    if args.command == 'teams-stats' and args.output == 'json':
+    elif args.command == 'teams-stats' and args.output == 'json':
         teams_stats(args.season, condition='json')
 
-    if args.command == 'teams-stats' and args.output == 'sqlite':
+    elif args.command == 'teams-stats' and args.output == 'sqlite':
         teams_stats(args.season, condition='database')

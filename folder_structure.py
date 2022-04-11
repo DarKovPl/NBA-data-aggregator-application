@@ -1,4 +1,6 @@
 import os
+import time
+
 from sqlalchemy import Column, String, create_engine, Table
 from sqlalchemy.orm import declarative_base
 
@@ -20,20 +22,27 @@ class FolderStructure:
             os.makedirs(self.folder_for_files)
 
     def check_player_stats_csv_file(self):
-        if os.path.isfile(self.player_stats_csv_file):
-            return True
-        else:
-            return False
+        return os.path.isfile(self.player_stats_csv_file)
 
     def check_teams_stats_csv_file(self):
-        if os.path.isfile(self.teams_stats_csv_file):
+        return os.path.isfile(self.teams_stats_csv_file)
+
+    def check_date_to_update_player_stats(self) -> bool:
+        current_unix_time = time.time()
+        current_formatted = int(''.join(map(str, time.localtime(current_unix_time)[:-6])))
+
+        created_unix_time = os.path.getctime(self.player_stats_csv_file)
+        created_formatted = int(''.join(map(str, time.localtime(created_unix_time)[:-6])))
+
+        if current_formatted > created_formatted + 4:
             return True
         else:
             return False
 
     def delete_existing_csv_files(self):
         if os.path.isfile(self.player_stats_csv_file):
-            os.remove(self.player_stats_csv_file)
+            if self.check_date_to_update_player_stats():
+                os.remove(self.player_stats_csv_file)
 
         if os.path.isfile(self.teams_stats_csv_file):
             os.remove(self.teams_stats_csv_file)
