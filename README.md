@@ -13,7 +13,7 @@
 
 
 ## General Information
-This application gathers and filtering data about NBA league, and show or store results for user. This is a task for a intership in IT company. Application created and tested on Ubuntu 20.04.
+This application gathers from https://www.balldontlie.io/ API's and filtering data about the NBA league, and shows or store results for the user. This is a task for an internship in an IT company. Application created and tested on Ubuntu 20.04.
 
 ## Technologies Used
 * Python 3.9.5
@@ -23,9 +23,9 @@ This application gathers and filtering data about NBA league, and show or store 
 * SQLAlchemy 1.4.31
 
 ## Features
-* List the ready features here:
-* Getting all teams and group them by division. Result is print on the screen.
-* Getting players with a specific name (first or surname) who is the tallest and another one who weights the most. Results are printing on the screen in the metric system.
+* List of features:
+* Getting all teams and group them by division. The result is printed on the screen.
+* Getting players with a specific name (first or surname) who is the tallest and another one who weights the most. Results are printed on the screen in the metric system.
 * Getting statistics for a given season, and they are printed on the screen by default, but optionally they can be stored.
 
 ## Setup
