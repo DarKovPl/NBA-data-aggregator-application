@@ -1,5 +1,5 @@
 # Project Name
-> Recruitment task - backend internship 2022
+> NBA Data Aggregator Application
 
 ## Table of Contents
 * [General Info](#general-information)
